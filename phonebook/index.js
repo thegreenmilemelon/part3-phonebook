@@ -50,6 +50,48 @@ app.get("/info", (request, response) => {
   `);
 });
 
+app.delete("/api/persons/:id", (request, response) => {
+  const id = Number(request.params.id);
+  persons = persons.filter((person) => person.id !== id);
+  response.status(204).end();
+});
+
+app.use(express.json());
+
+const generateId = () => {
+  const maxID = persons.length > 0 ? Math.max(...persons.map((p) => p.id)) : 0;
+  return maxID + 1;
+};
+
+app.post("/api/persons", (request, response) => {
+  const body = request.body;
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: "content missing",
+    });
+  }
+
+  if (persons.find((person) => person.name === body.name)) {
+    return response.status(400).json({
+      error: "name must be unique",
+    });
+  }
+
+  if (persons.find((person) => person.number === body.number)) {
+    return response.status(400).json({
+      error: "number must be unique",
+    });
+  }
+
+  const person = {
+    id: generateId(),
+    name: body.name,
+    number: body.number,
+  };
+  persons = persons.concat(person);
+  response.json(person);
+});
+
 const PORT = 3002;
 app.listen(PORT, () => {
   console.log("Server is running on port ", PORT);
