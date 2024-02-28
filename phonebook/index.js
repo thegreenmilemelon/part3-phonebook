@@ -25,8 +25,14 @@ let persons = [
   },
 ];
 
-app.use(morgan("tiny"));
+// app.use(morgan("tiny"));
 // app.use(morgan("dev"));
+
+app.use(
+  morgan(
+    ":method :url :status :res[content-length] - :response-time ms :body :date[web] :remote-addr"
+  )
+);
 
 app.get("/", (request, response) => {
   response.send("<h1>Hello World!</h1>");
@@ -94,6 +100,10 @@ app.post("/api/persons", (request, response) => {
   };
   persons = persons.concat(person);
   response.json(person);
+});
+
+morgan.token("body", (req) => {
+  return JSON.stringify(req.body);
 });
 
 const PORT = 3002;
