@@ -46,7 +46,7 @@ app.get("/api/persons/:id", (request, response) => {
     })
     .catch((error) => {
       console.log(error);
-      response.status(500).send({ error: "cannot find the id" });
+      response.status(400).send({ error: "malformatted id" });
     });
 });
 
