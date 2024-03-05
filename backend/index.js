@@ -2,12 +2,22 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
+const app = express();
 const Person = require("./models/person");
 
 let persons = [];
-const app = express();
 
 app.use(express.static("dist"));
+
+const errorHandler = (error, request, response, next) => {
+  console.log(error.method);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  }
+  next(error);
+};
+
 app.use(cors());
 app.use(express.json());
 
@@ -44,10 +54,7 @@ app.get("/api/persons/:id", (request, response) => {
         response.status(404).end();
       }
     })
-    .catch((error) => {
-      console.log(error);
-      response.status(400).send({ error: "malformatted id" });
-    });
+    .catch((error) => next(error));
 });
 
 app.post("/api/persons", (request, response) => {
@@ -57,27 +64,60 @@ app.post("/api/persons", (request, response) => {
       error: "content missing",
     });
   }
-  const person = new Person({
+  Person.findOne({ name: body.name }).then((result) => {
+    if (result) {
+      result.phone = body.phone;
+      result
+        .save()
+        .then((savedPerson) => {
+          response.json(savedPerson);
+        })
+        .catch((error) => next(error));
+    } else {
+      const person = new Person({
+        name: body.name,
+        phone: body.phone,
+      });
+      person
+        .save()
+        .then((savedPerson) => {
+          response.json(savedPerson);
+        })
+        .catch((error) => next(error));
+    }
+  });
+});
+
+app.put("/api/persons/:id", (request, response, next) => {
+  const body = request.body;
+  const person = {
     name: body.name,
     phone: body.phone,
-  });
-  person
-    .save()
-    .then((savedPerson) => {
-      response.json(savedPerson);
+  };
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then((updatedPerson) => {
+      if (updatedPerson) {
+        response.json(updatedPerson);
+      } else {
+        response.status(404).end();
+      }
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => next(error));
 });
 
 app.delete("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id);
-  persons = persons.filter((person) => person.id !== id);
-  response.status(204).end();
+  Person.findByIdAndRemove(request.params.id)
+    .then(() => {
+      response.status(204).end();
+    })
+    .catch((error) => {
+      next(error);
+    });
 });
 
 app.use(unknownEndpoint);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
