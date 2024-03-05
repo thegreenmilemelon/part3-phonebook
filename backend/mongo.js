@@ -13,6 +13,8 @@ const phone = process.argv[4];
 
 const url = `mongodb+srv://phonebook:${password}@cluster0.fwso8ka.mongodb.net/phonebook?retryWrites=true&w=majority`;
 
+mongoose.set("strictQuery", false);
+
 mongoose.connect(url);
 
 const personSchema = new mongoose.Schema({
