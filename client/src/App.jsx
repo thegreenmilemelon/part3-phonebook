@@ -117,7 +117,8 @@ const App = () => {
         handleNotification(message, "success");
       })
       .catch((error) => {
-        const message = error;
+        console.log(error);
+        const message = error.response.data.error;
         handleNotification(message, "error");
       });
   };
