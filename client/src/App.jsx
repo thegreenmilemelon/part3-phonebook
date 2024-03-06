@@ -49,6 +49,13 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
+
+    if (newPerson.name.length < 3) {
+      const message = "Name must be at least 3 characters long";
+      handleNotification(message, "error");
+      return;
+    }
+
     const existingPerson = persons.find(
       (person) => person.name.toLowerCase() === newName.toLowerCase()
     );
