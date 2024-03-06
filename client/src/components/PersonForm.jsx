@@ -9,7 +9,7 @@ const PersonForm = ({
     <h3>Add a new</h3>
     <div>
       <label htmlFor="name">Name:</label>
-      <input id="name" value={newName} onChange={onNameChange} />
+      <input id="name" value={newName} onChange={onNameChange} min={3} />
     </div>
     <div>
       <label htmlFor="number">Phone Number:</label>
