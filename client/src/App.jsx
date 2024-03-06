@@ -50,12 +50,6 @@ const App = () => {
       number: newNumber,
     };
 
-    // if (newPerson.name.length < 3) {
-    //   const message = "Name must be at least 3 characters long";
-    //   handleNotification(message, "error");
-    //   return;
-    // }
-
     const existingPerson = persons.find(
       (person) => person.name.toLowerCase() === newName.toLowerCase()
     );
@@ -117,8 +111,8 @@ const App = () => {
         handleNotification(message, "success");
       })
       .catch((error) => {
-        console.log(error);
-        const message = error.response.data.error;
+        console.log("frontend error ", error.response.data);
+        const message = "error.response.data.error";
         handleNotification(message, "error");
       });
   };

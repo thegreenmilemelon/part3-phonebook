@@ -6,7 +6,7 @@ const PersonForm = ({
   onSubmit,
 }) => (
   <form onSubmit={onSubmit}>
-    <h3>Add a new</h3>
+    <h3>Add a new person</h3>
     <div>
       <label htmlFor="name">Name:</label>
       <input id="name" value={newName} onChange={onNameChange} />
