@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Persons from "./components/Persons";
 import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
@@ -86,6 +86,7 @@ const App = () => {
               handleNotification(message, "success");
             })
             .catch((error) => {
+              console.log("frontend error ", error.response.data);
               const updatedPerson = persons.filter(
                 (person) => person.id !== existingPerson.id
               );
