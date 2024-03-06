@@ -50,11 +50,11 @@ const App = () => {
       number: newNumber,
     };
 
-    if (newPerson.name.length < 3) {
-      const message = "Name must be at least 3 characters long";
-      handleNotification(message, "error");
-      return;
-    }
+    // if (newPerson.name.length < 3) {
+    //   const message = "Name must be at least 3 characters long";
+    //   handleNotification(message, "error");
+    //   return;
+    // }
 
     const existingPerson = persons.find(
       (person) => person.name.toLowerCase() === newName.toLowerCase()
@@ -106,14 +106,20 @@ const App = () => {
       }
     }
 
-    personObject.create(newPerson).then((response) => {
-      setPersons([...persons, response]);
-      setNewName("");
-      setNewNumber("");
+    personObject
+      .create(newPerson)
+      .then((response) => {
+        setPersons([...persons, response]);
+        setNewName("");
+        setNewNumber("");
 
-      const message = `${newName} was added to phonebook`;
-      handleNotification(message, "success");
-    });
+        const message = `${newName} was added to phonebook`;
+        handleNotification(message, "success");
+      })
+      .catch((error) => {
+        const message = error;
+        handleNotification(message, "error");
+      });
   };
 
   const filteredPersons = persons.filter((person) =>
