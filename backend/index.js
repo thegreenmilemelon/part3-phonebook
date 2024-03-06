@@ -57,14 +57,14 @@ app.get("/api/persons/:id", (request, response) => {
 
 app.post("/api/persons", (request, response) => {
   const body = request.body;
-  if (!body.name || !body.phone) {
+  if (!body.name || !body.number) {
     return response.status(400).json({
       error: "content missing",
     });
   }
   Person.findOne({ name: body.name }).then((result) => {
     if (result) {
-      result.phone = body.phone;
+      result.number = body.number;
       result
         .save()
         .then((savedPerson) => {
@@ -74,7 +74,7 @@ app.post("/api/persons", (request, response) => {
     } else {
       const person = new Person({
         name: body.name,
-        phone: body.phone,
+        number: body.number,
       });
       person
         .save()
@@ -90,7 +90,7 @@ app.put("/api/persons/:id", (request, response, next) => {
   const body = request.body;
   const person = {
     name: body.name,
-    phone: body.phone,
+    number: body.number,
   };
   Person.findByIdAndUpdate(request.params.id, person, { new: true })
     .then((updatedPerson) => {
@@ -104,7 +104,7 @@ app.put("/api/persons/:id", (request, response, next) => {
 });
 
 app.delete("/api/persons/:id", (request, response) => {
-  Person.findByIdAndRemove(request.params.id)
+  Person.findByIdAndDelete(request.params.id)
     .then(() => {
       response.status(204).end();
     })
