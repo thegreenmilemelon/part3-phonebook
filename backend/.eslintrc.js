@@ -22,7 +22,7 @@ module.exports = {
   },
   rules: {
     "@stylistic/js/indent": ["error", 2],
-    "linebreak-style": "off",
+    "linebreak-style": ["error", "unix"],
     "@stylistic/js/quotes": ["error", "double"],
     "@stylistic/js/semi": ["error", "always"],
     "@stylistic/js/no-trailing-spaces": "error",
