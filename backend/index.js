@@ -5,8 +5,6 @@ require("dotenv").config();
 const app = express();
 const Person = require("./models/person");
 
-let persons = [];
-
 app.use(express.static("dist"));
 
 const errorHandler = (error, request, response, next) => {

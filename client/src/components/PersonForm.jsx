@@ -15,7 +15,7 @@ const PersonForm = ({
       <label htmlFor="number">Phone Number:</label>
       <input
         id="number"
-        type="number"
+        type="text"
         value={newNumber}
         onChange={onNumberChange}
       />

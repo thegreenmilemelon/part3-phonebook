@@ -19,6 +19,7 @@ const App = () => {
 
   useEffect(() => {
     personObject.getAll().then((response) => {
+      console.log("response is ", response);
       setPersons(response);
     });
   }, []);
@@ -47,7 +48,6 @@ const App = () => {
     const newPerson = {
       name: newName,
       number: newNumber,
-      id: Date.now().toString(),
     };
     const existingPerson = persons.find(
       (person) => person.name.toLowerCase() === newName.toLowerCase()
